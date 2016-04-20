@@ -1,8 +1,6 @@
 #include "6502.h"
 #include "segdefs_6502.h"
 #include "transdefs_6502.h"
-#include <bitset>
-#include <assert.h>
 
 const int _6502::ngnd = 558;
 const int _6502::npwr = 657;
