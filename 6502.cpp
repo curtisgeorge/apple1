@@ -21,7 +21,7 @@ _6502::_6502() : sim(segdefs_6502, transdefs_6502, ngnd, npwr) {
 
 void _6502::initChip() {
     for(auto i = 0; i < sim.segdefs.size(); i++) {
-        if(sim.nodes[i] != nullptr) {
+        if(sim.nodes[i] != NULL) {
             sim.nodes[i]->state = false;
         }
     }

@@ -11,12 +11,12 @@ chipsim::chipsim(std::vector<int>& segdefs, std::vector< std::vector<int> >& tra
 }
 
 chipsim::~chipsim() {
-    for(node* n : nodes) {
-        delete n;
+    for(auto it = nodes.begin(); it != nodes.end(); it++) {
+        delete *it;
     }
     
-    for(transistor *t : transistors) {
-        delete t;
+    for(auto it = transistors.begin(); it != transistors.end(); it++) {
+        delete *it;
     }
 }
 
@@ -28,7 +28,7 @@ void chipsim::setupNodes() {
             nodes[i]->state = false;
         }
         else {
-            nodes[i] = nullptr;
+            nodes[i] = NULL;
         }
     }
 }
@@ -79,8 +79,8 @@ void chipsim::recalcNodeList(std::vector<int> list){
     recalcHash.resize(segdefs.size());
     for(auto j=0;j<100;j++){		// loop limiter
         if(list.size()==0) return;
-        for(int i : list) {
-            recalcNode(i);
+        for(auto it = list.begin(); it != list.end(); it++) {
+            recalcNode(*it);
         }
         list = recalclist;
         recalclist.clear();
@@ -94,11 +94,12 @@ void chipsim::recalcNode(int nn){
     if(nn==npwr) return;
     getNodeGroup(nn);
     bool newState = getNodeValue();
-    for(int i : group) {
-        node* n = nodes[i];
+    for(auto it = group.begin(); it != group.end(); it++) {
+        node* n = nodes[*it];
         if(n->state==newState) continue;
         n->state = newState;
-        for(transistor* t : n->gates) {
+        for(auto it = n->gates.begin(); it != n->gates.end(); it++) {
+            transistor* t = *it;
             if(n->state){
                 turnTransistorOn(t);
             }
@@ -130,8 +131,8 @@ bool chipsim::arrayContains(std::vector<int> array, int n) {
 bool chipsim::getNodeValue(){
     if(arrayContains(group, ngnd)) return false;
     if(arrayContains(group, npwr)) return true;
-    for(int i : group){
-        node* n = nodes[i];
+    for(auto it = group.begin(); it != group.end(); it++){
+        node* n = nodes[*it];
         if(n->pullup) return true;
         if(n->pulldown) return false;
         if(n->state) return true;
@@ -158,7 +159,8 @@ void chipsim::addNodeToGroup(int i){
     group.push_back(i);
     if(i==ngnd) return;
     if(i==npwr) return;
-    for(transistor* t : nodes[i]->c1c2s) {
+    for(auto it = nodes[i]->c1c2s.begin(); it != nodes[i]->c1c2s.end(); it++) {
+        transistor* t = *it;
         if(!t->on) continue;
         int other;
         if(t->c1==i) other=t->c2;
@@ -170,7 +172,7 @@ void chipsim::addNodeToGroup(int i){
 std::vector<int> chipsim::allNodes(){
     std::vector<int> res;
     for(int i = 0 ; i < segdefs.size(); i++) {
-        if(nodes[i] != nullptr) {
+        if(nodes[i] != NULL) {
             if((i!=npwr)&&(i!=ngnd)) res.push_back(i);
         }
     }
