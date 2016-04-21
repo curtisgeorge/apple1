@@ -12,8 +12,8 @@ public:
 private:
   bool clk;
   _6502 cpu;
-  uint8_t bank0[4096] = {0};
-  uint8_t bank1[4096] = {0};
+  uint8_t bank0[4096];
+  uint8_t bank1[4096];
   uint8_t bankE[4096];
   uint8_t bankF[256];
   uint8_t DRA;

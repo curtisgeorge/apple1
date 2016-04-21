@@ -3,6 +3,9 @@
 #include "Apple1.h"
 
 Apple1::Apple1() : clk(false) {
+  bank0 = {0};
+  bank1 = {0};
+ 
   DRA = 0;
   DRB = 0;
   DDRA = 0;
