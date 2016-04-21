@@ -2,6 +2,7 @@
 #define __netlist__chipsim__
 
 #include <vector>
+#include <memory>
 
 class transistor {
 public:
@@ -16,14 +17,13 @@ public:
     bool pullup;
     bool pulldown;
     bool state;
-    std::vector<transistor*> gates;
-    std::vector<transistor*> c1c2s;
+    std::vector< std::shared_ptr<transistor> > gates;
+    std::vector< std::shared_ptr<transistor> > c1c2s;
 };
 
 class chipsim {
 public:
     chipsim(std::vector<int>&, std::vector< std::vector<int> >&, int, int);
-    ~chipsim();
     void setHigh(int);
     void setLow(int);
     bool isNodeHigh(int);
@@ -31,8 +31,8 @@ public:
     std::vector<int> allNodes();
     std::vector<int>& segdefs;
     std::vector< std::vector<int> >& transdefs;
-    std::vector<node*> nodes;
-    std::vector<transistor*> transistors;
+    std::vector< std::shared_ptr<node> > nodes;
+    std::vector< std::shared_ptr<transistor> > transistors;
 private:
     void setupNodes();
     void setupTransistors();
@@ -41,8 +41,8 @@ private:
     void addRecalcNode(int);
     bool arrayContains(std::vector<int>&, int);
     bool getNodeValue();
-    void turnTransistorOn(transistor*);
-    void turnTransistorOff(transistor*);
+    void turnTransistorOn(std::shared_ptr<transistor>&);
+    void turnTransistorOff(std::shared_ptr<transistor>&);
     void addNodeToGroup(int);
     
     int ngnd;

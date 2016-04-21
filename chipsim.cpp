@@ -10,25 +10,15 @@ chipsim::chipsim(std::vector<int>& segdefs, std::vector< std::vector<int> >& tra
     setupTransistors();
 }
 
-chipsim::~chipsim() {
-    for(node* n : nodes) {
-        delete n;
-    }
-    
-    for(transistor *t : transistors) {
-        delete t;
-    }
-}
-
 void chipsim::setupNodes() {
     for(auto i = 0; i < segdefs.size(); i++) {
         if(segdefs[i] != 2) {
-            nodes[i] = new node();
+            nodes[i] = std::make_shared<node>();
             nodes[i]->pullup = segdefs[i];
             nodes[i]->state = false;
         }
         else {
-            nodes[i] = nullptr;
+            nodes[i] = std::shared_ptr<node>(nullptr);
         }
     }
 }
@@ -41,7 +31,7 @@ void chipsim::setupTransistors() {
         int c2 = tdef[2];
         if(c1==ngnd){c1=c2; c2=ngnd;}
         if(c1==npwr){c1=c2; c2=npwr;}
-        transistor* trans = new transistor();
+        auto trans = std::make_shared<transistor>();
         trans->on = false;
         trans->gate = gate;
         trans->c1 = c1;
@@ -95,10 +85,10 @@ void chipsim::recalcNode(int nn){
     getNodeGroup(nn);
     bool newState = getNodeValue();
     for(int i : group) {
-        node* n = nodes[i];
+        auto n = nodes[i];
         if(n->state==newState) continue;
         n->state = newState;
-        for(transistor* t : n->gates) {
+        for(auto t : n->gates) {
             if(n->state){
                 turnTransistorOn(t);
             }
@@ -131,7 +121,7 @@ bool chipsim::getNodeValue(){
     if(arrayContains(group, ngnd)) return false;
     if(arrayContains(group, npwr)) return true;
     for(int i : group){
-        node* n = nodes[i];
+        auto n = nodes[i];
         if(n->pullup) return true;
         if(n->pulldown) return false;
         if(n->state) return true;
@@ -139,13 +129,13 @@ bool chipsim::getNodeValue(){
     return false;
 }
 
-void chipsim::turnTransistorOn(transistor* t){
+void chipsim::turnTransistorOn(std::shared_ptr<transistor>& t){
     if(t->on) return;
     t->on = true;
     addRecalcNode(t->c1);
 }
 
-void chipsim::turnTransistorOff(transistor* t){
+void chipsim::turnTransistorOff(std::shared_ptr<transistor>& t){
     if(!t->on) return;
     t->on = false;
     addRecalcNode(t->c1);
@@ -158,7 +148,7 @@ void chipsim::addNodeToGroup(int i){
     group.push_back(i);
     if(i==ngnd) return;
     if(i==npwr) return;
-    for(transistor* t : nodes[i]->c1c2s) {
+    for(auto t : nodes[i]->c1c2s) {
         if(!t->on) continue;
         int other;
         if(t->c1==i) other=t->c2;
