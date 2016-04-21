@@ -76,7 +76,7 @@ void _6502::writeDataBus(uint8_t x){
     int dbnodes[8] = {1005, 82, 945, 650, 1393, 175, 1591, 1349};
     for(auto i=0;i<8;i++){
         int nn = dbnodes[i];
-        node* n = sim.nodes[nn];
+        auto n = sim.nodes[nn];
         if((x%2)==0) {
             n->pulldown=true; n->pullup=false;
         }
