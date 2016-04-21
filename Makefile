@@ -1,7 +1,7 @@
 CPP_FILES := $(wildcard *.cpp)
 OBJ_FILES := $(CPP_FILES:.cpp=.o)
 LD_FLAGS := -lncurses
-CC_FLAGS := -O3 -std=c++0x
+CC_FLAGS := -Wall -O3 -std=c++0x
 
 all: apple1
 
