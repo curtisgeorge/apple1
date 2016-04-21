@@ -1,7 +1,6 @@
 #ifndef __netlist__chipsim__
 #define __netlist__chipsim__
 
-#include <stdio.h>
 #include <vector>
 
 class transistor {
@@ -28,10 +27,10 @@ public:
     void setHigh(int);
     void setLow(int);
     bool isNodeHigh(int);
-    void recalcNodeList(std::vector<int>);
+    void recalcNodeList(std::vector<int>&);
     std::vector<int> allNodes();
-    std::vector<int> segdefs;
-    std::vector< std::vector<int> > transdefs;
+    std::vector<int>& segdefs;
+    std::vector< std::vector<int> >& transdefs;
     std::vector<node*> nodes;
     std::vector<transistor*> transistors;
 private:
@@ -40,7 +39,7 @@ private:
     void recalcNode(int);
     void getNodeGroup(int);
     void addRecalcNode(int);
-    bool arrayContains(std::vector<int>, int);
+    bool arrayContains(std::vector<int>&, int);
     bool getNodeValue();
     void turnTransistorOn(transistor*);
     void turnTransistorOff(transistor*);

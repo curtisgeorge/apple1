@@ -33,7 +33,8 @@ void _6502::initChip() {
     sim.setLow(clk0);
     sim.setHigh(rdy); sim.setLow(so);
     sim.setHigh(irq); sim.setHigh(nmi);
-    sim.recalcNodeList(sim.allNodes());
+    auto allNodes = sim.allNodes();
+    sim.recalcNodeList(allNodes);
 }
 
 void _6502::step(bool clk) {

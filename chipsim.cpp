@@ -73,7 +73,7 @@ bool chipsim::isNodeHigh(int nn) {
     return(nodes[nn]->state);
 }
 
-void chipsim::recalcNodeList(std::vector<int> list){
+void chipsim::recalcNodeList(std::vector<int>& list){
     recalclist.clear();
     recalcHash.clear();
     recalcHash.resize(segdefs.size());
@@ -122,7 +122,7 @@ void chipsim::addRecalcNode(int nn){
     recalcHash[nn] = 1;
 }
 
-bool chipsim::arrayContains(std::vector<int> array, int n) {
+bool chipsim::arrayContains(std::vector<int>& array, int n) {
     auto it=std::find(array.begin(),array.end(),n);
     return (it != array.end());
 }
